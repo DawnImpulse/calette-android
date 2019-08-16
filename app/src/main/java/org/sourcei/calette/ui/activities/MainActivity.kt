@@ -17,10 +17,12 @@ package org.sourcei.calette.ui.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterColorCircle
 import org.sourcei.calette.ui.adapters.AdapterColorHorizontal
+import org.sourcei.calette.utils.functions.RxBus
 import org.sourcei.calette.utils.reusables.Arrays
 
 /**
@@ -36,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var circleColorAdapter: AdapterColorCircle
     private lateinit var horizontalColorAdapter: AdapterColorHorizontal
     private lateinit var circleColors: MutableList<Pair<String, Boolean>>
+    private val disposables by lazy { CompositeDisposable() }
+    private var currentCirclePos = 0
 
     /**
      * on create
@@ -54,5 +58,37 @@ class MainActivity : AppCompatActivity() {
         circleColorAdapter = AdapterColorCircle(circleColors)
         colorCircleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         colorCircleRecycler.adapter = circleColorAdapter
+
+        disposables.add(RxBus.subscribe { event(it) })
+    }
+
+    /**
+     * removing subscribers
+     */
+    override fun onDestroy() {
+        super.onDestroy()
+
+        disposables.clear()
+    }
+
+    /**
+     * Event bus
+     * @param color
+     */
+    fun event(color: String) {
+        if (color.isNotEmpty()) {
+            val pos = circleColors.withIndex().filter { it.value.first == color }.map { it.index }[0]
+            val colored = circleColors[currentCirclePos]
+
+            circleColors.removeAt(pos)
+            circleColors.add(pos, Pair(color, true))
+            circleColorAdapter.notifyItemChanged(pos)
+
+            circleColors.removeAt(currentCirclePos)
+            circleColors.add(currentCirclePos, Pair(colored.first, false))
+            circleColorAdapter.notifyItemChanged(currentCirclePos)
+
+            currentCirclePos = pos
+        }
     }
 }

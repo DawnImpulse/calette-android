@@ -31,7 +31,9 @@ dependencies {
     /*-------------- FIREBASE --------------*/
 
     /*------------- ADDITIONAL- ------------*/
+    implementation 'co.revely:gradient:1.0.1' // gradient
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0' //rx relay
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

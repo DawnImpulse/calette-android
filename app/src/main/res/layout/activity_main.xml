@@ -25,9 +25,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/colorCircleRecycler"
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
                     android:layout_height="48dp"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal" />
 
 
                 <TextView
@@ -43,5 +43,12 @@
             </RelativeLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+
+    <!--Recycler-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mainRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
