@@ -25,6 +25,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/colorCircleRecycler"
                     android:layout_width="match_parent"
+                    android:orientation="horizontal"
                     android:layout_height="48dp"
                     android:layout_marginTop="16dp" />
 

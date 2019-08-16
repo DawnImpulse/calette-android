@@ -16,7 +16,12 @@ package org.sourcei.calette.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
 import org.sourcei.calette.R
+import org.sourcei.calette.ui.adapters.AdapterColorCircle
+import org.sourcei.calette.ui.adapters.AdapterColorHorizontal
+import org.sourcei.calette.utils.reusables.Arrays
 
 /**
  * @info -
@@ -28,6 +33,9 @@ import org.sourcei.calette.R
  * @note Updates :
  */
 class MainActivity : AppCompatActivity() {
+    private lateinit var circleColorAdapter: AdapterColorCircle
+    private lateinit var horizontalColorAdapter: AdapterColorHorizontal
+    private lateinit var circleColors: MutableList<Pair<String, Boolean>>
 
     /**
      * on create
@@ -35,5 +43,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        circleColors = Arrays.materialColorsList.filter { it[5].name == "500" }.map { Pair(it[5].color, false) }.toMutableList()
+
+        // marking first position as active
+        val red = circleColors[0]
+        circleColors.removeAt(0)
+        circleColors.add(0, Pair(red.first, true))
+
+        circleColorAdapter = AdapterColorCircle(circleColors)
+        colorCircleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        colorCircleRecycler.adapter = circleColorAdapter
     }
 }
