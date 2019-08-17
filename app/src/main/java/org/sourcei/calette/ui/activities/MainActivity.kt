@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterColorCircle
 import org.sourcei.calette.ui.adapters.AdapterColorHorizontal
+import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.utils.functions.RxBus
 import org.sourcei.calette.utils.reusables.Arrays
 
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var circleColorAdapter: AdapterColorCircle
     private lateinit var horizontalColorAdapter: AdapterColorHorizontal
     private lateinit var circleColors: MutableList<Pair<String, Boolean>>
+    private lateinit var palette: List<PojoColor>
     private val disposables by lazy { CompositeDisposable() }
     private var currentCirclePos = 0
 
@@ -48,16 +50,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        circleColors = Arrays.materialColorsList.filter { it[5].name == "500" }.map { Pair(it[5].color, false) }.toMutableList()
+        circleColors = Arrays.materialColorsList.filter { it.second[5].name == "500" }.map { Pair(it.second[5].color, false) }.toMutableList()
 
         // marking first position as active
         val red = circleColors[0]
         circleColors.removeAt(0)
         circleColors.add(0, Pair(red.first, true))
 
+        // handling for circle colors
         circleColorAdapter = AdapterColorCircle(circleColors)
         colorCircleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         colorCircleRecycler.adapter = circleColorAdapter
+
+        // handling for color palette
+        palette = Arrays.materialColorsList[0].second
+        horizontalColorAdapter = AdapterColorHorizontal(palette)
+        mainRecycler.layoutManager = LinearLayoutManager(this)
+        mainRecycler.adapter = horizontalColorAdapter
 
         disposables.add(RxBus.subscribe { event(it) })
     }
@@ -87,6 +96,10 @@ class MainActivity : AppCompatActivity() {
             circleColors.removeAt(currentCirclePos)
             circleColors.add(currentCirclePos, Pair(colored.first, false))
             circleColorAdapter.notifyItemChanged(currentCirclePos)
+
+            palette = Arrays.materialColorsList[pos].second
+            horizontalColorAdapter = AdapterColorHorizontal(palette)
+            mainRecycler.adapter = horizontalColorAdapter
 
             currentCirclePos = pos
         }

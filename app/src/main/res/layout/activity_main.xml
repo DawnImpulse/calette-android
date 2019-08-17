@@ -47,6 +47,8 @@
 
     <!--Recycler-->
     <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="120dp"
+        android:clipToPadding="false"
         android:id="@+id/mainRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

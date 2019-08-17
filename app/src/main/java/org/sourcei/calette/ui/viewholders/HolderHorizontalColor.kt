@@ -14,11 +14,14 @@
  **/
 package org.sourcei.calette.ui.viewholders
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.inflator_horizontal_color.view.*
 import org.sourcei.calette.ui.pojo.PojoColor
+import org.sourcei.calette.utils.handlers.ColorHandler
 
 /**
  * @info -
@@ -35,14 +38,22 @@ class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
     var code = view.horizontalColorCode
     var name = view.horizontalColorName
     var bookmark = view.horizontalBookmark
+    var bookmarkIcon = view.horizontalBookmarkIcon
 
     /**
      * set details
      */
-    fun setDetails(color:PojoColor){
+    fun setDetails(color: PojoColor) {
         layout.setBackgroundColor(color.color.toColorInt())
         code.text = color.color
         name.text = color.name
+
+        val contrast = ColorHandler.getContrastColor(color.color.toColorInt())
+
+        code.setTextColor(contrast)
+        name.setTextColor(contrast)
+        //bookmarkIcon.drawable.setColorFilter(color.color.toColorInt(), PorterDuff.Mode.SRC_ATOP)
+        bookmarkIcon.drawable.colorFilter = PorterDuffColorFilter(contrast,PorterDuff.Mode.SRC_ATOP)
 
         bookmark.setOnClickListener {
 

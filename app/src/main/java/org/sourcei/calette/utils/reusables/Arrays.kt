@@ -313,30 +313,49 @@ object Arrays {
     )
 
     val grey = listOf(
-            PojoColor("#fafafa","50"),
-            PojoColor("#f5f5f5","100"),
-            PojoColor("#eeeeee","200"),
-            PojoColor("#e0e0e0","300"),
-            PojoColor("#bdbdbd","400"),
-            PojoColor("#9e9e9e","500"),
-            PojoColor("#757575","600"),
-            PojoColor("#616161","700"),
-            PojoColor("#424242","800"),
-            PojoColor("#212121","900")
+            PojoColor("#fafafa", "50"),
+            PojoColor("#f5f5f5", "100"),
+            PojoColor("#eeeeee", "200"),
+            PojoColor("#e0e0e0", "300"),
+            PojoColor("#bdbdbd", "400"),
+            PojoColor("#9e9e9e", "500"),
+            PojoColor("#757575", "600"),
+            PojoColor("#616161", "700"),
+            PojoColor("#424242", "800"),
+            PojoColor("#212121", "900")
     )
 
     val bluegrey = listOf(
-            PojoColor("#eceff1","50"),
-            PojoColor("#cfd8dc","100"),
-            PojoColor("#b0bec5","200"),
-            PojoColor("#90a4ae","300"),
-            PojoColor("#78909c","400"),
-            PojoColor("#607d8b","500"),
-            PojoColor("#546e7a","600"),
-            PojoColor("#455a64","700"),
-            PojoColor("#37474f","800"),
-            PojoColor("#263238","900")
+            PojoColor("#eceff1", "50"),
+            PojoColor("#cfd8dc", "100"),
+            PojoColor("#b0bec5", "200"),
+            PojoColor("#90a4ae", "300"),
+            PojoColor("#78909c", "400"),
+            PojoColor("#607d8b", "500"),
+            PojoColor("#546e7a", "600"),
+            PojoColor("#455a64", "700"),
+            PojoColor("#37474f", "800"),
+            PojoColor("#263238", "900")
     )
 
-    var materialColorsList = listOf(red, pink, purple, deeppurple, indigo, blue, lightblue, cyan, teal, green, lightgreen, lime, yellow, amber, orange, deeporange, brown, grey, bluegrey)
+    var materialColorsList = listOf(
+            Pair("red", red),
+            Pair("pink", pink),
+            Pair("purple", purple),
+            Pair("deeppurple", deeppurple),
+            Pair("indigo", indigo),
+            Pair("blue", blue),
+            Pair("lightblue", lightblue),
+            Pair("cyan", cyan),
+            Pair("teal", teal),
+            Pair("green", green),
+            Pair("lightgreen", lightgreen),
+            Pair("lime", lime),
+            Pair("yellow", yellow),
+            Pair("amber", amber),
+            Pair("orange", orange),
+            Pair("deeporange", deeporange),
+            Pair("brown", brown),
+            Pair("grey", grey),
+            Pair("bluegrey", bluegrey))
 }
