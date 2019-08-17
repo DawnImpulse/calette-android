@@ -39,6 +39,7 @@ class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
     var name = view.horizontalColorName
     var bookmark = view.horizontalBookmark
     var bookmarkIcon = view.horizontalBookmarkIcon
+    var copyIcon = view.horizontalCopyIcon
 
     /**
      * set details
@@ -53,6 +54,7 @@ class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
         code.setTextColor(contrast)
         name.setTextColor(contrast)
         bookmarkIcon.drawable.colorFilter = PorterDuffColorFilter(contrast,PorterDuff.Mode.SRC_ATOP)
+        copyIcon.drawable.colorFilter = PorterDuffColorFilter(contrast,PorterDuff.Mode.SRC_ATOP)
 
         bookmark.setOnClickListener {
 

@@ -72,6 +72,22 @@ OR PERFORMANCE OF THIS SOFTWARE.
                     app:srcCompat="@drawable/vd_bookmark" />
             </FrameLayout>
 
+            <!--Bookmark-->
+            <FrameLayout
+                android:id="@+id/horizontalCopy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@id/horizontalBookmark">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/horizontalCopyIcon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_copy" />
+            </FrameLayout>
+
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 

@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.revely.gradient.RevelyGradient
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.sourcei.calette.R
@@ -77,13 +78,14 @@ class MainActivity : AppCompatActivity() {
 
         // changing appbar text & color
         mainTitle.setTextColor(ColorHandler.getContrastColor(circleColors[0].first.toColorInt()))
-        mainTitle.text = F.capWord(Arrays.materialColorsList[0].first)
+        mainTitle.text = Arrays.materialColorsList[0].first.toUpperCase()
         (mainAppBar.background.current as LayerDrawable).colorFilter = PorterDuffColorFilter(circleColors[0].first.toColorInt(), PorterDuff.Mode.SRC_OVER)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             window.statusBarColor = Arrays.materialColorsList[0].second[7].color.toColorInt()
 
         disposables.add(RxBus.subscribe { event(it) })
+        fabGradient()
     }
 
     /**
@@ -121,7 +123,7 @@ class MainActivity : AppCompatActivity() {
 
             // changing appbar color & name
             mainTitle.setTextColor(ColorHandler.getContrastColor(color.toColorInt()))
-            mainTitle.text = F.capWord(Arrays.materialColorsList[pos].first)
+            mainTitle.text = Arrays.materialColorsList[pos].first.toUpperCase()
             (mainAppBar.background.current as LayerDrawable).colorFilter = PorterDuffColorFilter(color.toColorInt(), PorterDuff.Mode.SRC_OVER)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -130,5 +132,15 @@ class MainActivity : AppCompatActivity() {
 
             currentCirclePos = pos
         }
+    }
+
+    /**
+     * random gradient for fab
+     */
+    fun fabGradient(){
+        RevelyGradient
+            .linear()
+            .colors(intArrayOf(F.randomColor().toColorInt(), F.randomColor().toColorInt()))
+            .onBackgroundOf(fabLayout)
     }
 }

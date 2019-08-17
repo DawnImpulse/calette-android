@@ -41,7 +41,8 @@
                     android:letterSpacing="0.2"
                     android:text="RED"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -49,10 +50,76 @@
 
     <!--Recycler-->
     <androidx.recyclerview.widget.RecyclerView
-        android:paddingTop="120dp"
-        android:clipToPadding="false"
         android:id="@+id/mainRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="120dp"
+        android:paddingBottom="64dp" />
+
+
+    <!--Fab-->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="196dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="18dp">
+
+        <FrameLayout
+            android:id="@+id/fabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <!--Setting-->
+            <FrameLayout
+                android:id="@+id/settings"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_settings" />
+            </FrameLayout>
+
+            <!--Bookmark-->
+            <FrameLayout
+                android:id="@+id/bookmarks"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_bookmark_all" />
+            </FrameLayout>
+
+            <!--Gradient-->
+            <FrameLayout
+                android:id="@+id/gradient"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_gradient" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
