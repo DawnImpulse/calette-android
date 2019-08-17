@@ -52,7 +52,6 @@ class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
 
         code.setTextColor(contrast)
         name.setTextColor(contrast)
-        //bookmarkIcon.drawable.setColorFilter(color.color.toColorInt(), PorterDuff.Mode.SRC_ATOP)
         bookmarkIcon.drawable.colorFilter = PorterDuffColorFilter(contrast,PorterDuff.Mode.SRC_ATOP)
 
         bookmark.setOnClickListener {

@@ -14,8 +14,13 @@
  **/
 package org.sourcei.calette.ui.activities
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +28,9 @@ import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterColorCircle
 import org.sourcei.calette.ui.adapters.AdapterColorHorizontal
 import org.sourcei.calette.ui.pojo.PojoColor
+import org.sourcei.calette.utils.functions.F
 import org.sourcei.calette.utils.functions.RxBus
+import org.sourcei.calette.utils.handlers.ColorHandler
 import org.sourcei.calette.utils.reusables.Arrays
 
 /**
@@ -68,6 +75,14 @@ class MainActivity : AppCompatActivity() {
         mainRecycler.layoutManager = LinearLayoutManager(this)
         mainRecycler.adapter = horizontalColorAdapter
 
+        // changing appbar text & color
+        mainTitle.setTextColor(ColorHandler.getContrastColor(circleColors[0].first.toColorInt()))
+        mainTitle.text = F.capWord(Arrays.materialColorsList[0].first)
+        (mainAppBar.background.current as LayerDrawable).colorFilter = PorterDuffColorFilter(circleColors[0].first.toColorInt(), PorterDuff.Mode.SRC_OVER)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            window.statusBarColor = Arrays.materialColorsList[0].second[7].color.toColorInt()
+
         disposables.add(RxBus.subscribe { event(it) })
     }
 
@@ -89,17 +104,29 @@ class MainActivity : AppCompatActivity() {
             val pos = circleColors.withIndex().filter { it.value.first == color }.map { it.index }[0]
             val colored = circleColors[currentCirclePos]
 
+            // highlighting new color
             circleColors.removeAt(pos)
             circleColors.add(pos, Pair(color, true))
             circleColorAdapter.notifyItemChanged(pos)
 
+            // removing highlight of previous color
             circleColors.removeAt(currentCirclePos)
             circleColors.add(currentCirclePos, Pair(colored.first, false))
             circleColorAdapter.notifyItemChanged(currentCirclePos)
 
+            // changing the palette
             palette = Arrays.materialColorsList[pos].second
             horizontalColorAdapter = AdapterColorHorizontal(palette)
             mainRecycler.adapter = horizontalColorAdapter
+
+            // changing appbar color & name
+            mainTitle.setTextColor(ColorHandler.getContrastColor(color.toColorInt()))
+            mainTitle.text = F.capWord(Arrays.materialColorsList[pos].first)
+            (mainAppBar.background.current as LayerDrawable).colorFilter = PorterDuffColorFilter(color.toColorInt(), PorterDuff.Mode.SRC_OVER)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                window.statusBarColor = Arrays.materialColorsList[pos].second[7].color.toColorInt()
+
 
             currentCirclePos = pos
         }

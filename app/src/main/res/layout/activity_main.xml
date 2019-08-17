@@ -8,6 +8,7 @@
     tools:context=".ui.activities.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/mainAppBar"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@drawable/bg_appbar">
@@ -31,6 +32,7 @@
 
 
                 <TextView
+                    android:id="@+id/mainTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
