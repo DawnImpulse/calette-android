@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!--Main Activity-->
         <activity
             android:name=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionbar">
@@ -22,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--Gradient List Activity-->
+        <activity
+            android:name=".ui.activities.GradientListActivity"
+            android:theme="@style/AppTheme.NoActionbar" />
     </application>
 
 </manifest>

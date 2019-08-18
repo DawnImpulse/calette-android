@@ -51,7 +51,7 @@ object F {
      * Generate random gradient
      */
     fun randomGradient(view: FrameLayout) {
-        val count = (2..4).random()
+        val count = (2..3).random()
         val angle = (0..180).random()
         val colors = mutableListOf<Int>()
 

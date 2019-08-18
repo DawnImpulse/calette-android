@@ -19,6 +19,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,7 @@ import org.sourcei.calette.ui.adapters.AdapterColorHorizontal
 import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.utils.functions.F
 import org.sourcei.calette.utils.functions.RxBus
+import org.sourcei.calette.utils.functions.openActivity
 import org.sourcei.calette.utils.handlers.ColorHandler
 import org.sourcei.calette.utils.reusables.Arrays
 
@@ -43,7 +45,7 @@ import org.sourcei.calette.utils.reusables.Arrays
  * @note Created on 2019-08-15 by Saksham
  * @note Updates :
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var circleColorAdapter: AdapterColorCircle
     private lateinit var horizontalColorAdapter: AdapterColorHorizontal
     private lateinit var circleColors: MutableList<Pair<String, Boolean>>
@@ -86,6 +88,9 @@ class MainActivity : AppCompatActivity() {
 
         disposables.add(RxBus.subscribe { event(it) })
         fabGradient()
+
+        // on click listeners
+        gradient.setOnClickListener(this)
     }
 
     /**
@@ -97,10 +102,14 @@ class MainActivity : AppCompatActivity() {
         disposables.clear()
     }
 
-    /**
-     * Event bus
-     * @param color
-     */
+    // handling click listener
+    override fun onClick(view: View) {
+        when (view.id) {
+            gradient.id -> openActivity(GradientListActivity::class.java)
+        }
+    }
+
+    // event bus
     fun event(color: String) {
         if (color.isNotEmpty()) {
             val pos = circleColors.withIndex().filter { it.value.first == color }.map { it.index }[0]
@@ -134,13 +143,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * random gradient for fab
-     */
-    fun fabGradient(){
+    // random gradient for fab
+    private fun fabGradient() {
         RevelyGradient
-            .linear()
-            .colors(intArrayOf(F.randomColor().toColorInt(), F.randomColor().toColorInt()))
-            .onBackgroundOf(fabLayout)
+                .linear()
+                .colors(intArrayOf(F.randomColor().toColorInt(), F.randomColor().toColorInt()))
+                .onBackgroundOf(fabLayout)
     }
 }

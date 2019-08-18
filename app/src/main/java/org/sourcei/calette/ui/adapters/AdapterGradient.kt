@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.viewholders.HolderGradient
 import org.sourcei.calette.utils.reusables.OnLoadMoreListener
@@ -51,16 +52,34 @@ class AdapterGradient(
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                val mLinearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
+                if (!isLoading) {
+                    val layoutManager = recyclerView.layoutManager
 
-                totalItemCount = mLinearLayoutManager.itemCount
-                lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition()
+                    // last visible item for staggered grid
+                    fun getLastVisibleItem(lastVisibleItemPositions: List<Int>): Int {
+                        var maxSize = 0
+                        lastVisibleItemPositions.forEachIndexed { index, _ ->
+                            if (index == 0) {
+                                maxSize = lastVisibleItemPositions[index]
+                            } else if (lastVisibleItemPositions[index] > maxSize) {
+                                maxSize = lastVisibleItemPositions[index]
+                            }
+                        }
 
-                if (!isLoading && totalItemCount <= lastVisibleItem + visibleThreshold) {
-                    if (loadMoreListener != null) {
-                        loadMoreListener!!.onLoadMore()
+                        return maxSize
                     }
-                    isLoading = true
+
+                    totalItemCount = layoutManager!!.itemCount
+
+                    if (layoutManager is StaggeredGridLayoutManager)
+                        lastVisibleItem = getLastVisibleItem(layoutManager.findLastVisibleItemPositions(null).toList())
+
+                    if (layoutManager is LinearLayoutManager)
+                        lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                    if (totalItemCount <= lastVisibleItem + visibleThreshold) {
+                        isLoading = true
+                    }
                 }
             }
         })
@@ -79,9 +98,9 @@ class AdapterGradient(
     // creating views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM)
-            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_circle_color, parent, false))
+            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_gradient, parent, false))
         else
-            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_circle_color, parent, false))
+            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_loading, parent, false))
     }
 
     // binding views
