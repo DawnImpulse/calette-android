@@ -15,7 +15,9 @@
 package org.sourcei.calette.ui.viewholders
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import co.revely.gradient.RevelyGradient
 import kotlinx.android.synthetic.main.inflator_gradient.view.*
 import org.sourcei.calette.utils.functions.F
 
@@ -31,12 +33,30 @@ import org.sourcei.calette.utils.functions.F
 class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
     val layout = view.gradientLayout
     val bookmark = view.gradientBookmark
+    val outer = view.outerLayout
+    val context = view.context
 
     /**
      * set gradient
      */
-    fun setGradient(){
-        F.randomGradient(layout)
+    fun setGradient(colors: List<Int>, angle: Int, height: Int) {
+        /*val point = F.displayDimensions(context)
+        val width = point.x / 2 - F.dpToPx(8, context)
+
+        outer.layoutParams = ViewGroup.LayoutParams(width, F.dpToPx((140..260).random(), context))
+        F.randomGradient(layout)*/
+
+        val point = F.displayDimensions(context)
+        val width = point.x / 2 - F.dpToPx(8, context)
+        outer.layoutParams = ViewGroup.LayoutParams(width, height)
+
+        RevelyGradient
+                .linear()
+                .colors(colors.toIntArray())
+                .angle(angle.toFloat())
+                .onBackgroundOf(layout)
+
+
         bookmark.setOnClickListener {
 
         }

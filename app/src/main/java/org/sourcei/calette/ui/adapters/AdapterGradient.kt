@@ -33,7 +33,7 @@ import org.sourcei.calette.utils.reusables.OnLoadMoreListener
  * @note Updates :
  */
 class AdapterGradient(
-        val items: List<Int?>,
+        val items: List<Map<Int, Any>?>,
         recyclerView: RecyclerView
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -79,6 +79,7 @@ class AdapterGradient(
 
                     if (totalItemCount <= lastVisibleItem + visibleThreshold) {
                         isLoading = true
+                        loadMoreListener!!.onLoadMore()
                     }
                 }
             }
@@ -87,7 +88,7 @@ class AdapterGradient(
 
     // return 50 items
     override fun getItemCount(): Int {
-        return 50
+        return items.size
     }
 
     // return view type
@@ -105,8 +106,10 @@ class AdapterGradient(
 
     // binding views
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is HolderGradient)
-            holder.setGradient()
+        if (holder is HolderGradient) {
+            val item = items[position]!!
+            holder.setGradient(item[0] as List<Int>, item[1] as Int, item[2] as Int)
+        }
     }
 
     // set loaded

@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.activity_gradient_list.*
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterGradient
+import org.sourcei.calette.utils.functions.F
+import org.sourcei.calette.utils.reusables.OnLoadMoreListener
 
 /**
  * @info -
@@ -31,8 +33,8 @@ import org.sourcei.calette.ui.adapters.AdapterGradient
  * @note Created on 2019-08-18 by Saksham
  * @note Updates :
  */
-class GradientListActivity : AppCompatActivity() {
-    private lateinit var items: MutableList<Int?>
+class GradientListActivity : AppCompatActivity(), OnLoadMoreListener {
+    private lateinit var items: MutableList<Map<Int, Any>>
     private lateinit var adapter: AdapterGradient
 
     // on create
@@ -40,9 +42,36 @@ class GradientListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gradient_list)
 
-        items = (1..50).toMutableList()
+        items = generate()
         adapter = AdapterGradient(items, gradientRecycler)
         gradientRecycler.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         gradientRecycler.adapter = adapter
+
+        adapter.setLoadMoreListener(this)
+    }
+
+    // load more listener
+    override fun onLoadMore() {
+        val count = items.size
+        items.addAll(generate())
+        adapter.notifyItemRangeInserted(count, 50)
+        adapter.setLoaded()
+    }
+
+    // generate color, angle & height
+    private fun generate(): MutableList<Map<Int, Any>> {
+        val list = mutableListOf<Map<Int, Any>>()
+
+        for (i in 1..50) {
+            val map = mutableMapOf<Int, Any>()
+
+            map[0] = F.randomGradient()
+            map[1] = (0..180).random()
+            map[2] = F.dpToPx((140..260).random(), this)
+
+            list.add(map)
+        }
+
+        return list
     }
 }

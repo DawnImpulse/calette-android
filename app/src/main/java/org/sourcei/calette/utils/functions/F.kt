@@ -19,9 +19,7 @@ import android.content.Intent
 import android.graphics.Point
 import android.net.Uri
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.core.graphics.toColorInt
-import co.revely.gradient.RevelyGradient
 
 /**
  * @info -
@@ -50,7 +48,7 @@ object F {
     /**
      * Generate random gradient
      */
-    fun randomGradient(view: FrameLayout) {
+    fun randomGradient(): List<Int> {
         val count = (2..3).random()
         val angle = (0..180).random()
         val colors = mutableListOf<Int>()
@@ -59,11 +57,13 @@ object F {
             colors.add(randomColor().toColorInt())
         }
 
-        RevelyGradient
+
+        return colors
+        /*RevelyGradient
             .linear()
             .colors(colors.toIntArray())
             .angle(angle.toFloat())
-            .onBackgroundOf(view)
+            .onBackgroundOf(view)*/
 
     }
 
