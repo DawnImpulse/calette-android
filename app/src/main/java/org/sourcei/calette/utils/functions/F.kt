@@ -19,6 +19,9 @@ import android.content.Intent
 import android.graphics.Point
 import android.net.Uri
 import android.view.WindowManager
+import android.widget.FrameLayout
+import androidx.core.graphics.toColorInt
+import co.revely.gradient.RevelyGradient
 
 /**
  * @info -
@@ -35,12 +38,33 @@ object F {
      * Generating random color
      */
     fun randomColor(): String {
-        val chars = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
+        val chars =
+            listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
         var color = "#"
         for (i in 1..6) {
             color += chars[Math.floor(Math.random() * chars.size).toInt()]
         }
         return color
+    }
+
+    /**
+     * Generate random gradient
+     */
+    fun randomGradient(view: FrameLayout) {
+        val count = (2..4).random()
+        val angle = (0..180).random()
+        val colors = mutableListOf<Int>()
+
+        for (i in 1..count) {
+            colors.add(randomColor().toColorInt())
+        }
+
+        RevelyGradient
+            .linear()
+            .colors(colors.toIntArray())
+            .angle(angle.toFloat())
+            .onBackgroundOf(view)
+
     }
 
     // start intent
@@ -70,7 +94,13 @@ object F {
     }
 
     // get height based on screen width
-    fun getDynamicHeight(context: Context, screenWidth: Int, screenHeight: Int, width: Int, height: Int): Int {
+    fun getDynamicHeight(
+        context: Context,
+        screenWidth: Int,
+        screenHeight: Int,
+        width: Int,
+        height: Int
+    ): Int {
         val h = ((screenWidth - dpToPx(16, context)) * height) / width
 
         return if (h > (screenHeight - dpToPx(48, context)))
@@ -94,7 +124,9 @@ object F {
             val words = string.split("\\ ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             for (i in words.indices) {
                 if (words[i].isNotEmpty())
-                    result.append(Character.toUpperCase(words[i][0])).append(words[i].substring(1)).append(" ")
+                    result.append(Character.toUpperCase(words[i][0])).append(words[i].substring(1)).append(
+                        " "
+                    )
             }
             result.toString()
         } else

@@ -23,25 +23,48 @@ OR PERFORMANCE OF THIS SOFTWARE.
         android:layout_margin="8dp"
         app:cardCornerRadius="8dp">
 
-        <!--Color layout-->
-        <FrameLayout
-            android:id="@+id/gradientLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+            <!--Color layout-->
+            <FrameLayout
+                android:id="@+id/gradientLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <!--Bookmark-->
-        <FrameLayout
-            android:id="@+id/gradientBookmark"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="right|bottom">
+            <!--Bookmark-->
+            <FrameLayout
+                android:id="@+id/gradientBookmark"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/gradientBookmarkIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/vd_bookmark" />
-        </FrameLayout>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/gradientBookmarkIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_bookmark" />
+            </FrameLayout>
+
+
+            <!--Copy-->
+            <FrameLayout
+                android:id="@+id/gradientCopy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@id/gradientBookmark"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/gradientCopyIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_copy" />
+            </FrameLayout>
+        </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
