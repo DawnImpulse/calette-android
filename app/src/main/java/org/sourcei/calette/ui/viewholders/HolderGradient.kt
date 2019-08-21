@@ -16,10 +16,16 @@ package org.sourcei.calette.ui.viewholders
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import co.revely.gradient.RevelyGradient
+import io.paperdb.Paper
 import kotlinx.android.synthetic.main.inflator_gradient.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.sourcei.calette.utils.functions.F
+import org.sourcei.calette.utils.functions.toHexa
+import org.sourcei.calette.utils.functions.toast
 
 /**
  * @info -
@@ -31,10 +37,10 @@ import org.sourcei.calette.utils.functions.F
  * @note Updates :
  */
 class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
-    val layout = view.gradientLayout
-    val bookmark = view.gradientBookmark
-    val outer = view.outerLayout
-    val context = view.context
+    private val layout = view.gradientLayout!!
+    private val bookmark = view.gradientBookmark!!
+    private val outer = view.outerLayout!!
+    private val context = view.context!!
 
     /**
      * set gradient
@@ -58,7 +64,12 @@ class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
 
 
         bookmark.setOnClickListener {
-
+            GlobalScope.launch {
+                Paper.book().write("$angle-${colors.map { it.toHexa() }}", true)
+                (context as AppCompatActivity).runOnUiThread {
+                    context.toast("gradient bookmarked")
+                }
+            }
         }
     }
 }

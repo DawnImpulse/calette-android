@@ -16,9 +16,11 @@ package org.sourcei.calette.ui.viewholders
 
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.inflator_circle_color.view.*
+import org.sourcei.calette.R
 import org.sourcei.calette.utils.functions.RxBus
 import org.sourcei.calette.utils.functions.gone
 import org.sourcei.calette.utils.functions.show
@@ -37,6 +39,7 @@ class HolderCircleColor(view: View) : RecyclerView.ViewHolder(view) {
     val selected = view.circleSelectedLayout
     val selectedColor = view.circleSelectedColor
     val layout = view.circleColorLayout
+    val context = view.context
 
     /**
      * set color or selected
@@ -47,7 +50,7 @@ class HolderCircleColor(view: View) : RecyclerView.ViewHolder(view) {
             selected.show()
             circleColor.gone()
 
-            (selectedColor.background.current as GradientDrawable).setColor(color.first.toColorInt())
+            (selectedColor.background.current as GradientDrawable).setColor(ContextCompat.getColor(context, R.color.white))
 
         } else {
             selected.gone()

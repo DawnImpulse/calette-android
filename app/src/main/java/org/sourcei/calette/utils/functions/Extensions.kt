@@ -14,9 +14,7 @@
  **/
 package org.sourcei.calette.utils.functions
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -36,6 +34,7 @@ import org.sourcei.calette.BuildConfig
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+
 
 /**
  * @info -
@@ -139,6 +138,13 @@ fun String.md5(): String {
     return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
 }
 
+// copy string to clipboard
+fun String.copy(context: Context) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+    val clip = ClipData.newPlainText("color", this)
+    clipboard!!.setPrimaryClip(clip)
+}
+
 //convert to content uri
 fun Uri.toContentUri(context: Context): Uri {
     val cr = context.contentResolver
@@ -202,21 +208,33 @@ fun SharedPreferences.putAny(name: String, any: Any) {
     when (any) {
         is String -> edit().putString(name, any).apply()
         is Int -> edit().putInt(name, any).apply()
-        is Boolean -> edit().putBoolean(name,any).apply()
+        is Boolean -> edit().putBoolean(name, any).apply()
     }
 }
 
-fun SharedPreferences.remove(name:String){
+fun SharedPreferences.remove(name: String) {
     edit().remove(name).apply()
 }
 
 // log messages
 fun logd(message: Any) {
     if (BuildConfig.DEBUG)
-        Log.d("wallup", "${Exception().stackTrace[1].className.replace("${BuildConfig.APPLICATION_ID}.", "")} :: $message")
+        Log.d(
+            "wallup",
+            "${Exception().stackTrace[1].className.replace(
+                "${BuildConfig.APPLICATION_ID}.",
+                ""
+            )} :: $message"
+        )
 }
 
 fun loge(message: Any) {
     if (BuildConfig.DEBUG)
-        Log.e("wallup", "${Exception().stackTrace[1].className.replace("${BuildConfig.APPLICATION_ID}.", "")} :: $message")
+        Log.e(
+            "wallup",
+            "${Exception().stackTrace[1].className.replace(
+                "${BuildConfig.APPLICATION_ID}.",
+                ""
+            )} :: $message"
+        )
 }

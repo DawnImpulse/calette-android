@@ -112,34 +112,38 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     // event bus
     fun event(color: String) {
         if (color.isNotEmpty()) {
+
             val pos = circleColors.withIndex().filter { it.value.first == color }.map { it.index }[0]
-            val colored = circleColors[currentCirclePos]
 
-            // highlighting new color
-            circleColors.removeAt(pos)
-            circleColors.add(pos, Pair(color, true))
-            circleColorAdapter.notifyItemChanged(pos)
+            if (pos != currentCirclePos) {
+                val colored = circleColors[currentCirclePos]
 
-            // removing highlight of previous color
-            circleColors.removeAt(currentCirclePos)
-            circleColors.add(currentCirclePos, Pair(colored.first, false))
-            circleColorAdapter.notifyItemChanged(currentCirclePos)
+                // highlighting new color
+                circleColors.removeAt(pos)
+                circleColors.add(pos, Pair(color, true))
+                circleColorAdapter.notifyItemChanged(pos)
 
-            // changing the palette
-            palette = Arrays.materialColorsList[pos].second
-            horizontalColorAdapter = AdapterColorHorizontal(palette)
-            mainRecycler.adapter = horizontalColorAdapter
+                // removing highlight of previous color
+                circleColors.removeAt(currentCirclePos)
+                circleColors.add(currentCirclePos, Pair(colored.first, false))
+                circleColorAdapter.notifyItemChanged(currentCirclePos)
 
-            // changing appbar color & name
-            mainTitle.setTextColor(ColorHandler.getContrastColor(color.toColorInt()))
-            mainTitle.text = Arrays.materialColorsList[pos].first.toUpperCase()
-            (mainAppBar.background.current as LayerDrawable).colorFilter = PorterDuffColorFilter(color.toColorInt(), PorterDuff.Mode.SRC_OVER)
+                // changing the palette
+                palette = Arrays.materialColorsList[pos].second
+                horizontalColorAdapter = AdapterColorHorizontal(palette)
+                mainRecycler.adapter = horizontalColorAdapter
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                window.statusBarColor = Arrays.materialColorsList[pos].second[7].color.toColorInt()
+                // changing appbar color & name
+                mainTitle.setTextColor(ColorHandler.getContrastColor(color.toColorInt()))
+                mainTitle.text = Arrays.materialColorsList[pos].first.toUpperCase()
+                (mainAppBar.background.current as LayerDrawable).colorFilter = PorterDuffColorFilter(color.toColorInt(), PorterDuff.Mode.SRC_OVER)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    window.statusBarColor = Arrays.materialColorsList[pos].second[7].color.toColorInt()
 
 
-            currentCirclePos = pos
+                currentCirclePos = pos
+            }
         }
     }
 

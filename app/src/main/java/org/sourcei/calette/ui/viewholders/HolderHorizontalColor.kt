@@ -14,13 +14,20 @@
  **/
 package org.sourcei.calette.ui.viewholders
 
+import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
+import io.paperdb.Paper
 import kotlinx.android.synthetic.main.inflator_horizontal_color.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.sourcei.calette.ui.pojo.PojoColor
+import org.sourcei.calette.utils.functions.copy
+import org.sourcei.calette.utils.functions.toast
 import org.sourcei.calette.utils.handlers.ColorHandler
 
 /**
@@ -34,16 +41,19 @@ import org.sourcei.calette.utils.handlers.ColorHandler
  */
 class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
 
-    var layout = view.horizontalColorLayout
-    var code = view.horizontalColorCode
-    var name = view.horizontalColorName
-    var bookmark = view.horizontalBookmark
-    var bookmarkIcon = view.horizontalBookmarkIcon
-    var copyIcon = view.horizontalCopyIcon
+    private var layout = view.horizontalColorLayout!!
+    private var code = view.horizontalColorCode!!
+    private var name = view.horizontalColorName!!
+    private var bookmark = view.horizontalBookmark!!
+    private var copy = view.horizontalCopy!!
+    private var bookmarkIcon = view.horizontalBookmarkIcon!!
+    private var copyIcon = view.horizontalCopyIcon!!
+    private var context = view.context!!
 
     /**
      * set details
      */
+    @SuppressLint("DefaultLocale")
     fun setDetails(color: PojoColor) {
         layout.setBackgroundColor(color.color.toColorInt())
         code.text = color.color
@@ -51,13 +61,26 @@ class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
 
         val contrast = ColorHandler.getContrastColor(color.color.toColorInt())
 
+        // color handling
         code.setTextColor(contrast)
         name.setTextColor(contrast)
-        bookmarkIcon.drawable.colorFilter = PorterDuffColorFilter(contrast,PorterDuff.Mode.SRC_ATOP)
-        copyIcon.drawable.colorFilter = PorterDuffColorFilter(contrast,PorterDuff.Mode.SRC_ATOP)
+        bookmarkIcon.colorFilter = PorterDuffColorFilter(contrast, PorterDuff.Mode.SRC_ATOP)
+        copyIcon.colorFilter = PorterDuffColorFilter(contrast, PorterDuff.Mode.SRC_ATOP)
 
+
+        // on click listener
         bookmark.setOnClickListener {
+            GlobalScope.launch {
+                Paper.book().write(color.color, true)
+                (context as AppCompatActivity).runOnUiThread {
+                    context.toast("color bookmarked")
+                }
+            }
+        }
 
+        copy.setOnClickListener {
+            color.color.copy(context)
+            context.toast("copied ${color.color.toUpperCase()} to clipboard")
         }
     }
 }
