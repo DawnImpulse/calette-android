@@ -14,18 +14,22 @@
  **/
 package org.sourcei.calette.ui.viewholders
 
+import android.annotation.SuppressLint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import co.revely.gradient.RevelyGradient
 import io.paperdb.Paper
 import kotlinx.android.synthetic.main.inflator_gradient.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.sourcei.calette.utils.functions.F
-import org.sourcei.calette.utils.functions.toHexa
-import org.sourcei.calette.utils.functions.toast
+import org.sourcei.calette.ui.pojo.PojoColor
+import org.sourcei.calette.utils.functions.*
+import org.sourcei.calette.utils.handlers.ColorHandler
 
 /**
  * @info -
@@ -37,39 +41,87 @@ import org.sourcei.calette.utils.functions.toast
  * @note Updates :
  */
 class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
+    private val gradient = view.gradient
     private val layout = view.gradientLayout!!
     private val bookmark = view.gradientBookmark!!
     private val outer = view.outerLayout!!
     private val context = view.context!!
 
+    private val color = view.color
+    private val colorB = view.colorBookmark
+    private val colorBI = view.colorBookmarkIcon
+    private val colorC = view.colorCopy
+    private val colorCI = view.colorCopyIcon
+    private val code = view.colorCode
+    private val name = view.colorName
+
     /**
      * set gradient
      */
-    fun setGradient(colors: List<Int>, angle: Int, height: Int) {
-        /*val point = F.displayDimensions(context)
-        val width = point.x / 2 - F.dpToPx(8, context)
+    fun setGradient(map: Map<Int, Any>) {
 
-        outer.layoutParams = ViewGroup.LayoutParams(width, F.dpToPx((140..260).random(), context))
-        F.randomGradient(layout)*/
+        val colors = map[0] as List<Int>
+        val angle = map[1] as Int
+        val height = map[2] as Int
+
+        gradient.show()
+        color.gone()
 
         val point = F.displayDimensions(context)
         val width = point.x / 2 - F.dpToPx(8, context)
         outer.layoutParams = ViewGroup.LayoutParams(width, height)
 
         RevelyGradient
-                .linear()
-                .colors(colors.toIntArray())
-                .angle(angle.toFloat())
-                .onBackgroundOf(layout)
+            .linear()
+            .colors(colors.toIntArray())
+            .angle(angle.toFloat())
+            .onBackgroundOf(layout)
 
 
         bookmark.setOnClickListener {
             GlobalScope.launch {
-                Paper.book().write("$angle-${colors.map { it.toHexa() }}", true)
+
+                // we are doing this to keep the key unique
+                Paper.book().write("$angle-${colors.map { it.toHexa() }}", map)
+
                 (context as AppCompatActivity).runOnUiThread {
                     context.toast("gradient bookmarked")
                 }
             }
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    fun setColor(colorPojo: PojoColor) {
+        gradient.gone()
+        color.show()
+
+        color.setBackgroundColor(colorPojo.color.toColorInt())
+        code.text = colorPojo.color
+        name.text = colorPojo.name
+
+        val contrast = ColorHandler.getContrastColor(colorPojo.color.toColorInt())
+
+        // color handling
+        code.setTextColor(contrast)
+        name.setTextColor(contrast)
+        colorBI.colorFilter = PorterDuffColorFilter(contrast, PorterDuff.Mode.SRC_ATOP)
+        colorCI.colorFilter = PorterDuffColorFilter(contrast, PorterDuff.Mode.SRC_ATOP)
+
+
+        // on click listener
+        colorB.setOnClickListener {
+            GlobalScope.launch {
+                Paper.book().delete(colorPojo.color)
+                (context as AppCompatActivity).runOnUiThread {
+                    context.toast("bookmark removed")
+                }
+            }
+        }
+
+        colorC.setOnClickListener {
+            colorPojo.color.copy(context)
+            context.toast("copied ${colorPojo.color.toUpperCase()} to clipboard")
         }
     }
 }

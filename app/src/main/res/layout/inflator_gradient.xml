@@ -24,9 +24,12 @@ OR PERFORMANCE OF THIS SOFTWARE.
         android:layout_margin="8dp"
         app:cardCornerRadius="8dp">
 
+        <!--Gradient-->
         <RelativeLayout
+            android:id="@+id/gradient"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
             <!--Color layout-->
             <FrameLayout
                 android:id="@+id/gradientLayout"
@@ -66,6 +69,65 @@ OR PERFORMANCE OF THIS SOFTWARE.
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/vd_copy" />
             </FrameLayout>
+        </RelativeLayout>
+
+        <!--Color-->
+        <RelativeLayout
+            android:id="@+id/color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--Bookmark-->
+            <FrameLayout
+                android:id="@+id/colorBookmark"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/colorBookmarkIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_bookmarked" />
+            </FrameLayout>
+
+            <!--Copy-->
+            <FrameLayout
+                android:id="@+id/colorCopy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@id/colorBookmark">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/colorCopyIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/vd_copy" />
+            </FrameLayout>
+
+            <!--Code-->
+            <TextView
+                android:id="@+id/colorCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!--Name-->
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/colorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

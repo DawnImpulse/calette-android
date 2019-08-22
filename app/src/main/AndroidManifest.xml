@@ -29,6 +29,12 @@
         <activity
             android:name=".ui.activities.GradientListActivity"
             android:theme="@style/AppTheme.NoActionbar" />
+
+        <!--Bookmarks List Activity-->
+        <activity
+            android:name=".ui.activities.BookmarksActivity"
+            android:theme="@style/AppTheme.NoActionbar" />
+
     </application>
 
 </manifest>

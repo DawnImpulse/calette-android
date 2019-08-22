@@ -27,3 +27,4 @@ import com.jakewharton.rxrelay2.BehaviorRelay
  */
 
 val RxBus by lazy { BehaviorRelay.createDefault<String>("") }
+val RxBusMap by lazy { BehaviorRelay.createDefault<Map<String, String>>(mapOf()) }

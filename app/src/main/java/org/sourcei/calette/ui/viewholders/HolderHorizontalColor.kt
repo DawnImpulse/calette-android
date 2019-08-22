@@ -71,7 +71,7 @@ class HolderHorizontalColor(view: View) : RecyclerView.ViewHolder(view) {
         // on click listener
         bookmark.setOnClickListener {
             GlobalScope.launch {
-                Paper.book().write(color.color, true)
+                Paper.book().write(color.color, color)
                 (context as AppCompatActivity).runOnUiThread {
                     context.toast("color bookmarked")
                 }

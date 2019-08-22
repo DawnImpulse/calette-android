@@ -60,6 +60,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // gradient on fab
+        fabGradient()
+
+        // fetching colors for circle recycler
         circleColors = Arrays.materialColorsList.filter { it.second[5].name == "500" }.map { Pair(it.second[5].color, false) }.toMutableList()
 
         // marking first position as active
@@ -86,11 +90,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             window.statusBarColor = Arrays.materialColorsList[0].second[7].color.toColorInt()
 
-        disposables.add(RxBus.subscribe { event(it) })
-        fabGradient()
-
         // on click listeners
         gradient.setOnClickListener(this)
+        bookmarks.setOnClickListener(this)
+
+        // event listener
+        disposables.add(RxBus.subscribe { event(it) })
     }
 
     /**
@@ -106,6 +111,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             gradient.id -> openActivity(GradientListActivity::class.java)
+            bookmarks.id -> openActivity(BookmarksActivity::class.java)
         }
     }
 

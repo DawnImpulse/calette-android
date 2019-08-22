@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.sourcei.calette.R
+import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.ui.viewholders.HolderGradient
 import org.sourcei.calette.utils.reusables.OnLoadMoreListener
 
@@ -33,8 +34,8 @@ import org.sourcei.calette.utils.reusables.OnLoadMoreListener
  * @note Updates :
  */
 class AdapterGradient(
-        val items: List<Map<Int, Any>?>,
-        recyclerView: RecyclerView
+    val items: List<Pair<Int, Any>?>,
+    recyclerView: RecyclerView
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastVisibleItem: Int = 0
@@ -52,7 +53,7 @@ class AdapterGradient(
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                if (!isLoading) {
+                if (!isLoading && loadMoreListener != null) {
                     val layoutManager = recyclerView.layoutManager
 
                     // last visible item for staggered grid
@@ -72,7 +73,8 @@ class AdapterGradient(
                     totalItemCount = layoutManager!!.itemCount
 
                     if (layoutManager is StaggeredGridLayoutManager)
-                        lastVisibleItem = getLastVisibleItem(layoutManager.findLastVisibleItemPositions(null).toList())
+                        lastVisibleItem =
+                            getLastVisibleItem(layoutManager.findLastVisibleItemPositions(null).toList())
 
                     if (layoutManager is LinearLayoutManager)
                         lastVisibleItem = layoutManager.findLastVisibleItemPosition()
@@ -99,16 +101,31 @@ class AdapterGradient(
     // creating views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM)
-            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_gradient, parent, false))
+            HolderGradient(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.inflator_gradient,
+                    parent,
+                    false
+                )
+            )
         else
-            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_loading, parent, false))
+            HolderGradient(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.inflator_loading,
+                    parent,
+                    false
+                )
+            )
     }
 
     // binding views
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HolderGradient) {
             val item = items[position]!!
-            holder.setGradient(item[0] as List<Int>, item[1] as Int, item[2] as Int)
+            if (item.first == 0)
+                holder.setGradient(item.second as Map<Int, Any>)
+            else
+                holder.setColor(item.second as PojoColor)
         }
     }
 

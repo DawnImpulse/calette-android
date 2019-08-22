@@ -18,11 +18,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import io.paperdb.Paper
 import kotlinx.android.synthetic.main.activity_gradient_list.*
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterGradient
-import org.sourcei.calette.utils.functions.F
-import org.sourcei.calette.utils.reusables.OnLoadMoreListener
+import org.sourcei.calette.ui.pojo.PojoColor
 
 /**
  * @info -
@@ -30,11 +30,11 @@ import org.sourcei.calette.utils.reusables.OnLoadMoreListener
  * @author - Saksham
  * @note Last Branch Update - master
  *
- * @note Created on 2019-08-18 by Saksham
+ * @note Created on 2019-08-22 by Saksham
  * @note Updates :
  */
-class GradientListActivity : AppCompatActivity(), OnLoadMoreListener {
-    private lateinit var items: MutableList<Pair<Int, Map<Int, Any>>>
+class BookmarksActivity : AppCompatActivity() {
+    private var items: MutableList<Pair<Int, Any>?> = mutableListOf()
     private lateinit var adapter: AdapterGradient
 
     // on create
@@ -42,36 +42,25 @@ class GradientListActivity : AppCompatActivity(), OnLoadMoreListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gradient_list)
 
-        items = generate()
+        val bookmarks = Paper.book().allKeys
+
+        // add to items list either as gradient or color
+        bookmarks.forEach {
+            //it is a gradient
+            if (it.substring(0, 1) != "#") {
+                val item: Map<Int, Any> = Paper.book().read(it)
+                items.add(Pair(0, item))
+
+                // it is a color
+            } else {
+                val item: PojoColor = Paper.book().read(it)
+                items.add(Pair(1, item))
+            }
+        }
+
+        // adding to recycler
         adapter = AdapterGradient(items, gradientRecycler)
         gradientRecycler.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         gradientRecycler.adapter = adapter
-
-        adapter.setLoadMoreListener(this)
-    }
-
-    // load more listener
-    override fun onLoadMore() {
-        val count = items.size
-        items.addAll(generate())
-        adapter.notifyItemRangeInserted(count, 50)
-        adapter.setLoaded()
-    }
-
-    // generate color, angle & height
-    private fun generate(): MutableList<Pair<Int, Map<Int, Any>>> {
-        val list = mutableListOf<Pair<Int, Map<Int, Any>>>()
-
-        for (i in 1..50) {
-            val map = mutableMapOf<Int, Any>()
-
-            map[0] = F.randomGradient()
-            map[1] = (0..180).random()
-            map[2] = F.dpToPx((140..260).random(), this)
-
-            list.add(Pair(0, map))
-        }
-
-        return list
     }
 }
