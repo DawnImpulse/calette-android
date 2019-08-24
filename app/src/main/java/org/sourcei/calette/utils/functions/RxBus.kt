@@ -14,7 +14,7 @@
  **/
 package org.sourcei.calette.utils.functions
 
-import com.jakewharton.rxrelay2.BehaviorRelay
+import com.jakewharton.rxrelay2.PublishRelay
 
 /**
  * @info -
@@ -26,5 +26,5 @@ import com.jakewharton.rxrelay2.BehaviorRelay
  * @note Updates :
  */
 
-val RxBus by lazy { BehaviorRelay.createDefault<String>("") }
-val RxBusMap by lazy { BehaviorRelay.createDefault<Map<String, String>>(mapOf()) }
+val RxBus by lazy { PublishRelay.create<String>() }
+val RxBusMap by lazy { PublishRelay.create<Map<String, Any>>() }

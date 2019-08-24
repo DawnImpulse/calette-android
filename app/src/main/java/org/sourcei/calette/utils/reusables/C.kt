@@ -25,3 +25,6 @@ package org.sourcei.calette.utils.reusables
  */
 const val GRADIENT = "gradient"
 const val COLOR = "color"
+const val TYPE = "type"
+const val DELETE = "delete"
+const val POSITION = "position"

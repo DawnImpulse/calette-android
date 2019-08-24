@@ -20,6 +20,7 @@ import android.graphics.PorterDuffColorFilter
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import co.revely.gradient.RevelyGradient
@@ -27,9 +28,11 @@ import io.paperdb.Paper
 import kotlinx.android.synthetic.main.inflator_gradient.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.sourcei.calette.R
 import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.utils.functions.*
 import org.sourcei.calette.utils.handlers.ColorHandler
+import org.sourcei.calette.utils.reusables.POSITION
 
 /**
  * @info -
@@ -40,10 +43,11 @@ import org.sourcei.calette.utils.handlers.ColorHandler
  * @note Created on 2019-08-18 by Saksham
  * @note Updates :
  */
-class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
+class HolderGradient(view: View, val allBookmarks: Boolean) : RecyclerView.ViewHolder(view) {
     private val gradient = view.gradient
     private val layout = view.gradientLayout!!
     private val bookmark = view.gradientBookmark!!
+    private val bookmarkIcon = view.gradientBookmarkIcon!!
     private val outer = view.outerLayout!!
     private val context = view.context!!
 
@@ -71,11 +75,15 @@ class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
         val width = point.x / 2 - F.dpToPx(8, context)
         outer.layoutParams = ViewGroup.LayoutParams(width, height)
 
+        // set bookmarked icon
+        if (allBookmarks)
+            bookmarkIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.vd_bookmarked))
+
         RevelyGradient
-            .linear()
-            .colors(colors.toIntArray())
-            .angle(angle.toFloat())
-            .onBackgroundOf(layout)
+                .linear()
+                .colors(colors.toIntArray())
+                .angle(angle.toFloat())
+                .onBackgroundOf(layout)
 
 
         bookmark.setOnClickListener {
@@ -85,7 +93,15 @@ class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
                 Paper.book().write("$angle-${colors.map { it.toHexa() }}", map)
 
                 (context as AppCompatActivity).runOnUiThread {
-                    context.toast("gradient bookmarked")
+                    if (allBookmarks) {
+                        // send event
+                        val map = mutableMapOf<String, Any>()
+                        map[POSITION] = adapterPosition
+                        RxBusMap.accept(map)
+
+                        context.toast("gradient removed")
+                    } else
+                        context.toast("gradient bookmarked")
                 }
             }
         }
@@ -112,9 +128,19 @@ class HolderGradient(view: View) : RecyclerView.ViewHolder(view) {
         // on click listener
         colorB.setOnClickListener {
             GlobalScope.launch {
+
                 Paper.book().delete(colorPojo.color)
+
                 (context as AppCompatActivity).runOnUiThread {
-                    context.toast("bookmark removed")
+                    if (allBookmarks) {
+                        // send event
+                        val map = mutableMapOf<String, Any>()
+                        map[POSITION] = adapterPosition
+                        RxBusMap.accept(map)
+
+                        context.toast("color removed")
+                    } else
+                        context.toast("color bookmarked")
                 }
             }
         }

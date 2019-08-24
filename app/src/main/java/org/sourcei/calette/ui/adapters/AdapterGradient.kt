@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.ui.viewholders.HolderGradient
+import org.sourcei.calette.ui.viewholders.HolderLoading
 import org.sourcei.calette.utils.reusables.OnLoadMoreListener
 
 /**
@@ -34,8 +35,9 @@ import org.sourcei.calette.utils.reusables.OnLoadMoreListener
  * @note Updates :
  */
 class AdapterGradient(
-    val items: List<Pair<Int, Any>?>,
-    recyclerView: RecyclerView
+        val items: List<Pair<Int, Any>?>,
+        recyclerView: RecyclerView,
+        val allBookmarks: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastVisibleItem: Int = 0
@@ -74,7 +76,7 @@ class AdapterGradient(
 
                     if (layoutManager is StaggeredGridLayoutManager)
                         lastVisibleItem =
-                            getLastVisibleItem(layoutManager.findLastVisibleItemPositions(null).toList())
+                                getLastVisibleItem(layoutManager.findLastVisibleItemPositions(null).toList())
 
                     if (layoutManager is LinearLayoutManager)
                         lastVisibleItem = layoutManager.findLastVisibleItemPosition()
@@ -101,21 +103,9 @@ class AdapterGradient(
     // creating views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM)
-            HolderGradient(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.inflator_gradient,
-                    parent,
-                    false
-                )
-            )
+            HolderGradient(LayoutInflater.from(parent.context).inflate(R.layout.inflator_gradient, parent, false),allBookmarks)
         else
-            HolderGradient(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.inflator_loading,
-                    parent,
-                    false
-                )
-            )
+            HolderLoading(LayoutInflater.from(parent.context).inflate(R.layout.inflator_loading, parent, false))
     }
 
     // binding views

@@ -19,10 +19,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.paperdb.Paper
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_gradient_list.*
 import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterGradient
 import org.sourcei.calette.ui.pojo.PojoColor
+import org.sourcei.calette.utils.functions.RxBusMap
+import org.sourcei.calette.utils.reusables.POSITION
 
 /**
  * @info -
@@ -35,14 +38,16 @@ import org.sourcei.calette.ui.pojo.PojoColor
  */
 class BookmarksActivity : AppCompatActivity() {
     private var items: MutableList<Pair<Int, Any>?> = mutableListOf()
+    private val disposables by lazy { CompositeDisposable() }
     private lateinit var adapter: AdapterGradient
+    private lateinit var bookmarks: MutableList<String>
 
     // on create
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gradient_list)
 
-        val bookmarks = Paper.book().allKeys
+        bookmarks = Paper.book().allKeys.toMutableList()
 
         // add to items list either as gradient or color
         bookmarks.forEach {
@@ -59,8 +64,35 @@ class BookmarksActivity : AppCompatActivity() {
         }
 
         // adding to recycler
-        adapter = AdapterGradient(items, gradientRecycler)
+        adapter = AdapterGradient(items, gradientRecycler,true)
         gradientRecycler.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         gradientRecycler.adapter = adapter
+
+        //event handling
+        disposables.add(RxBusMap.subscribe { event(it) })
+    }
+
+    // clearing disposables
+    override fun onDestroy() {
+        super.onDestroy()
+
+        disposables.clear()
+    }
+
+    // event handling
+    fun event(it: Map<String, Any>) {
+
+        // remove from list & Paper
+        if (it.isNotEmpty()) {
+            val pos = it[POSITION] as Int
+            val key = bookmarks[pos]
+
+            items.removeAt(pos)
+            bookmarks.removeAt(pos)
+            Paper.book().delete(key)
+            runOnUiThread {
+                adapter.notifyItemRemoved(pos)
+            }
+        }
     }
 }
