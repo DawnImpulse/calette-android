@@ -53,6 +53,11 @@
             android:name=".ui.activities.BookmarksActivity"
             android:theme="@style/AppTheme.NoActionbar" />
 
+        <!--Settings-->
+        <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionbar" />
+
     </application>
 
 </manifest>

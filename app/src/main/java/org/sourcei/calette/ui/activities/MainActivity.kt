@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // on click listeners
         gradient.setOnClickListener(this)
         bookmarks.setOnClickListener(this)
+        settings.setOnClickListener(this)
 
         // event listener
         disposables.add(RxBus.subscribe { event(it) })
@@ -112,6 +113,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (view.id) {
             gradient.id -> openActivity(GradientListActivity::class.java)
             bookmarks.id -> openActivity(BookmarksActivity::class.java)
+            settings.id -> openActivity(SettingsActivity::class.java)
         }
     }
 
