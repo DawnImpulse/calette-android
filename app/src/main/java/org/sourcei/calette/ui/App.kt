@@ -15,7 +15,15 @@
 package org.sourcei.calette.ui
 
 import android.app.Application
+import androidx.preference.PreferenceManager
+import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
+import org.sourcei.calette.BuildConfig
+import org.sourcei.calette.utils.reusables.ANALYTICS
+import org.sourcei.calette.utils.reusables.CRASHLYTICS
+import org.sourcei.calette.utils.reusables.Prefs
 
 /**
  * @info -
@@ -26,11 +34,23 @@ import io.paperdb.Paper
  * @note Created on 2019-08-21 by Saksham
  * @note Updates :
  */
-class App : Application(){
+class App : Application() {
 
+    // on create
     override fun onCreate() {
         super.onCreate()
 
+        Prefs = PreferenceManager.getDefaultSharedPreferences(this)
         Paper.init(this)
+        analytics()
+    }
+
+    // enabling crashlytics in release builds
+    private fun analytics() {
+        if (!BuildConfig.DEBUG) {
+            if (Prefs.getBoolean(CRASHLYTICS, true))
+                Fabric.with(this, Crashlytics())
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(Prefs.getBoolean(ANALYTICS, true))
+        }
     }
 }

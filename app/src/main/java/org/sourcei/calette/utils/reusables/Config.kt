@@ -14,19 +14,16 @@
  **/
 package org.sourcei.calette.utils.reusables
 
+import android.content.SharedPreferences
+
 /**
  * @info -
  *
  * @author - Saksham
  * @note Last Branch Update - master
  *
- * @note Created on 2019-08-21 by Saksham
+ * @note Created on 2019-08-26 by Saksham
  * @note Updates :
  */
-const val GRADIENT = "gradient"
-const val COLOR = "color"
-const val TYPE = "type"
-const val DELETE = "delete"
-const val POSITION = "position"
-const val CRASHLYTICS = "crashlytics"
-const val ANALYTICS = "analytics"
+
+lateinit var Prefs: SharedPreferences
