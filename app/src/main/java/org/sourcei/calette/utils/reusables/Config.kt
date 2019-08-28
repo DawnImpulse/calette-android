@@ -25,5 +25,8 @@ import android.content.SharedPreferences
  * @note Created on 2019-08-26 by Saksham
  * @note Updates :
  */
+object Config {
+    lateinit var gradient:Map<Int,Any>
+}
 
 lateinit var Prefs: SharedPreferences

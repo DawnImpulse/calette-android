@@ -29,9 +29,12 @@ import kotlinx.android.synthetic.main.inflator_gradient.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.sourcei.calette.R
+import org.sourcei.calette.ui.activities.GradientActivity
 import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.utils.functions.*
 import org.sourcei.calette.utils.handlers.ColorHandler
+import org.sourcei.calette.utils.reusables.BOOKMARKED
+import org.sourcei.calette.utils.reusables.Config
 import org.sourcei.calette.utils.reusables.POSITION
 
 /**
@@ -86,6 +89,7 @@ class HolderGradient(view: View, val allBookmarks: Boolean) : RecyclerView.ViewH
                 .onBackgroundOf(layout)
 
 
+        // bookmark the gradient
         bookmark.setOnClickListener {
             GlobalScope.launch {
 
@@ -104,6 +108,18 @@ class HolderGradient(view: View, val allBookmarks: Boolean) : RecyclerView.ViewH
                         context.toast("gradient bookmarked")
                 }
             }
+        }
+
+        // open gradient info
+        layout.setOnClickListener {
+            Config.gradient = map
+
+            if (allBookmarks)
+                context.openActivity(GradientActivity::class.java) {
+                    putBoolean(BOOKMARKED, true)
+                }
+            else
+                context.openActivity(GradientActivity::class.java)
         }
     }
 
