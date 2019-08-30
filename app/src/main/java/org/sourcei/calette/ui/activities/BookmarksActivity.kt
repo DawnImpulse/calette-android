@@ -25,6 +25,7 @@ import org.sourcei.calette.R
 import org.sourcei.calette.ui.adapters.AdapterGradient
 import org.sourcei.calette.ui.pojo.PojoColor
 import org.sourcei.calette.utils.functions.RxBusMap
+import org.sourcei.calette.utils.functions.show
 import org.sourcei.calette.utils.reusables.POSITION
 
 /**
@@ -49,27 +50,31 @@ class BookmarksActivity : AppCompatActivity() {
 
         bookmarks = Paper.book().allKeys.toMutableList()
 
-        // add to items list either as gradient or color
-        bookmarks.forEach {
-            //it is a gradient
-            if (it.substring(0, 1) != "#") {
-                val item: Map<Int, Any> = Paper.book().read(it)
-                items.add(Pair(0, item))
+        if (bookmarks.isEmpty())
+            noBookmarks.show()
+        else {
+            // add to items list either as gradient or color
+            bookmarks.forEach {
+                //it is a gradient
+                if (it.substring(0, 1) != "#") {
+                    val item: Map<Int, Any> = Paper.book().read(it)
+                    items.add(Pair(0, item))
 
-                // it is a color
-            } else {
-                val item: PojoColor = Paper.book().read(it)
-                items.add(Pair(1, item))
+                    // it is a color
+                } else {
+                    val item: PojoColor = Paper.book().read(it)
+                    items.add(Pair(1, item))
+                }
             }
+
+            // adding to recycler
+            adapter = AdapterGradient(items, gradientRecycler, true)
+            gradientRecycler.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+            gradientRecycler.adapter = adapter
+
+            //event handling
+            disposables.add(RxBusMap.subscribe { event(it) })
         }
-
-        // adding to recycler
-        adapter = AdapterGradient(items, gradientRecycler,true)
-        gradientRecycler.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        gradientRecycler.adapter = adapter
-
-        //event handling
-        disposables.add(RxBusMap.subscribe { event(it) })
     }
 
     // clearing disposables

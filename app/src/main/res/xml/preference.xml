@@ -71,7 +71,7 @@
         <!--Me-->
         <Preference
             android:icon="@drawable/vd_account"
-            android:summary="Hii, I'm Saksham a Full Stack &amp; DevOps engineer + Graphics Designer with expertise in Nodejs, Android, Server Operations &amp; designing mockups. Love to contribute to open source and hope you leave a good feedback if you love this application. Thanks"
+            android:summary="Hii, I'm Saksham a Full Stack &amp; DevOps Engineer / Graphics Designer with expertise in Nodejs, Android, Server Operations &amp; designing mockups. Love to contribute to open source and hope you leave a good feedback if you love this application. Thanks"
             android:title="Saksham Khurana" />
 
         <!--Github-->
@@ -103,7 +103,7 @@
             android:icon="@drawable/vd_play"
             android:selectable="true"
             android:summary="View other apps"
-            android:title="Twitter">
+            android:title="Play Store">
 
             <intent
                 android:action="android.intent.action.VIEW"

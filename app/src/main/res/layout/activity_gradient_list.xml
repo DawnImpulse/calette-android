@@ -16,6 +16,16 @@ OR PERFORMANCE OF THIS SOFTWARE.
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <org.sourcei.calette.utils.reusables.VerticalTextView
+        android:id="@+id/noBookmarks"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:rotation="180"
+        android:text="NO BOOKMARKS AVAILABLE"
+        android:textSize="72dp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gradientRecycler"
         android:layout_width="match_parent"
