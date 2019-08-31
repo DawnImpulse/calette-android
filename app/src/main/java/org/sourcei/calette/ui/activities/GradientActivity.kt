@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.inflator_color_square.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.sourcei.calette.R
+import org.sourcei.calette.utils.functions.copy
 import org.sourcei.calette.utils.functions.gone
 import org.sourcei.calette.utils.functions.toHexa
 import org.sourcei.calette.utils.functions.toast
@@ -57,7 +58,7 @@ class GradientActivity : AppCompatActivity() {
     }
 
     // set color & angle
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "DefaultLocale")
     private fun setDetails() {
 
         val gradient = Config.gradient
@@ -65,12 +66,16 @@ class GradientActivity : AppCompatActivity() {
         val angle = gradient[1] as Int
 
         // setting various colors
-        colors.forEach {
+        colors.forEachIndexed { i, c ->
             val color = layoutInflater.inflate(R.layout.inflator_color_square, null)
-            color.colorSquareColor.setBackgroundColor(it)
-            color.colorSquareName.text = it.toHexa()
+            color.colorSquareColor.setBackgroundColor(c)
+            color.colorSquareName.text =c.toHexa()
 
             color.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            color.setOnClickListener {
+                c.toHexa().copy(this)
+                toast("copied ${c.toHexa().toUpperCase()} to clipboard")
+            }
             gradientSingleColors.addView(color)
         }
 

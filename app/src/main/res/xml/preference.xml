@@ -176,7 +176,7 @@
                     android:value="What can I help you with?" />
                 <extra
                     android:name="android.intent.extra.SUBJECT"
-                    android:value="Bug/Feedback for WallUp v2.1.0" />
+                    android:value="Bug/Feedback for Calette v1" />
             </intent>
 
         </Preference>
